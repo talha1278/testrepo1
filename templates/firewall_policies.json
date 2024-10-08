@@ -36,4 +36,4 @@
         "value": "[parameters('firewallPolicies')]"
       }
     }
-  }
+}
