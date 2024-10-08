@@ -30,14 +30,27 @@
           "addressSpace": {
             "addressPrefixes": "[parameters('addressPrefixes')]"
           },
-          "subnets": "[parameters('subnets')]"
+          "subnets": {
+            "copy": [
+              {
+                "name": "subnetsLoop",
+                "count": "[length(parameters('subnets'))]",
+                "input": {
+                  "name": "[parameters('subnets')[copyIndex()].name]",
+                  "properties": {
+                    "addressPrefix": "[parameters('subnets')[copyIndex()].properties.addressPrefix]"
+                  }
+                }
+              }
+            ]
+          }
         }
       }
     ],
     "outputs": {
       "subnetIds": {
         "type": "array",
-        "value": "[array(map(parameters('subnets'), 'id', resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), item().name)))]"
+        "value": "[array(range(0, length(parameters('subnets'))), resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnets')[copyIndex()].name))]"
       }
     }
   }
