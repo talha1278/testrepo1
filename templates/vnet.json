@@ -37,7 +37,7 @@
     "outputs": {
       "subnetIds": {
         "type": "array",
-        "value": "[arrayLength(parameters('subnets'))]"
+        "value": "[array(map(parameters('subnets'), 'id', resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), item().name)))]"
       }
     }
   }
