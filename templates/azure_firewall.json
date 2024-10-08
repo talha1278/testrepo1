@@ -14,6 +14,12 @@
       },
       "firewallPolicyId": {
         "type": "string"
+      },
+      "firewallPublicIpId": {
+        "type": "string",
+        "metadata": {
+          "description": "The resource ID of the Public IP to associate with the Azure Firewall."
+        }
       }
     },
     "resources": [
@@ -33,6 +39,9 @@
               "properties": {
                 "subnet": {
                   "id": "[parameters('firewallSubnetId')]"
+                },
+                "publicIPAddress": {
+                  "id": "[parameters('firewallPublicIpId')]"
                 }
               }
             }

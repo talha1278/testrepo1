@@ -3,26 +3,17 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "publicIPAddressName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the public IP address resource."
-      }
+      "type": "string"
     },
     "sku": {
       "type": "string",
       "defaultValue": "Standard",
-      "allowedValues": [ "Basic", "Standard" ],
-      "metadata": {
-        "description": "The SKU of the public IP address."
-      }
+      "allowedValues": ["Basic", "Standard"]
     },
     "publicIPAllocationMethod": {
       "type": "string",
       "defaultValue": "Static",
-      "allowedValues": [ "Static", "Dynamic" ],
-      "metadata": {
-        "description": "The Public IP allocation method."
-      }
+      "allowedValues": ["Static", "Dynamic"]
     }
   },
   "resources": [
@@ -40,10 +31,6 @@
     }
   ],
   "outputs": {
-    "publicIPAddress": {
-      "type": "string",
-      "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))).ipAddress]"
-    },
     "publicIpAddressResourceId": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
