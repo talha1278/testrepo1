@@ -5,37 +5,31 @@
     "publicIPAddressName": {
       "type": "string",
       "metadata": {
-        "description": "The name of the public IP address resource"
+        "description": "The name of the public IP address resource."
       }
     },
     "sku": {
       "type": "string",
-      "defaultValue": "Basic",
-      "allowedValues": [
-        "Basic",
-        "Standard"
-      ],
+      "defaultValue": "Standard",
+      "allowedValues": [ "Basic", "Standard" ],
       "metadata": {
-        "description": "The SKU of the public IP address. See https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-ip-addresses-overview-arm for more information"
+        "description": "The SKU of the public IP address."
       }
     },
     "publicIPAllocationMethod": {
       "type": "string",
       "defaultValue": "Static",
-      "allowedValues": [
-        "Static",
-        "Dynamic"
-      ],
+      "allowedValues": [ "Static", "Dynamic" ],
       "metadata": {
-        "description": "The public IP address allocation method"
+        "description": "The Public IP allocation method."
       }
     }
   },
   "resources": [
     {
+      "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2021-02-01",
       "name": "[parameters('publicIPAddressName')]",
-      "type": "Microsoft.Network/publicIPAddresses",
       "location": "[resourceGroup().location]",
       "sku": {
         "name": "[parameters('sku')]"
