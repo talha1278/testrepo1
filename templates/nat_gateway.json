@@ -21,6 +21,12 @@
         "description": "The resource ID of the Public IP to associate with the NAT Gateway."
       }
     },
+    "firewallSubnetId": {
+      "type": "string",
+      "metadata": {
+        "description": "The resource ID of the subnet (firewall subnet) to associate with the NAT Gateway."
+      }
+    },
     "idleTimeoutInMinutes": {
       "type": "int",
       "defaultValue": 4,
@@ -44,6 +50,9 @@
             "id": "[parameters('publicIpId')]"
           }
         ],
+        "subnet": {
+          "id": "[parameters('firewallSubnetId')]"
+        },
         "idleTimeoutInMinutes": "[parameters('idleTimeoutInMinutes')]"
       }
     }
