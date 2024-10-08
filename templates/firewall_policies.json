@@ -17,7 +17,7 @@
       {
         "type": "Microsoft.Network/firewallPolicies",
         "apiVersion": "2021-02-01",
-        "name": "[concat(parameters('firewallPolicies')[copyIndex()].name)]",
+        "name": "[parameters('firewallPolicies')[copyIndex()].name]",
         "location": "[parameters('location')]",
         "properties": {
           "sku": {
@@ -33,7 +33,7 @@
     "outputs": {
       "firewallPolicyIds": {
         "type": "array",
-        "value": "[concat(parameters('firewallPolicies'), 'name')]"
+        "value": "[array(parameters('firewallPolicies'))]"
       }
     }
   }

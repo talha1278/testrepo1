@@ -37,7 +37,7 @@
     "outputs": {
       "subnetIds": {
         "type": "array",
-        "value": "[arrayLength(parameters('subnets'))]"
+        "value": "[parameters('subnets')]"
       }
     }
   }
