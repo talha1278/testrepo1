@@ -18,12 +18,6 @@
         "metadata": {
           "description": "Array of subnets to create in the virtual network."
         }
-      },
-      "natGatewayId": {
-        "type": "string",
-        "metadata": {
-          "description": "The resource ID of the NAT Gateway."
-        }
       }
     },
     "resources": [
@@ -36,23 +30,7 @@
           "addressSpace": {
             "addressPrefixes": "[parameters('addressPrefixes')]"
           },
-          "subnets": [
-            {
-              "name": "[parameters('subnets')[0].name]",
-              "properties": {
-                "addressPrefix": "[parameters('subnets')[0].properties.addressPrefix]",
-                "natGateway": {
-                  "id": "[parameters('natGatewayId')]"
-                }
-              }
-            },
-            {
-              "name": "[parameters('subnets')[1].name]",
-              "properties": {
-                "addressPrefix": "[parameters('subnets')[1].properties.addressPrefix]"
-              }
-            }
-          ]
+          "subnets": "[parameters('subnets')]"
         }
       }
     ],
