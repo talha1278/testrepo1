@@ -33,7 +33,7 @@
     "outputs": {
       "firewallPolicyIds": {
         "type": "array",
-        "value": "[array(parameters('firewallPolicies'))]"
+        "value": "[parameters('firewallPolicies')]"
       }
     }
   }
