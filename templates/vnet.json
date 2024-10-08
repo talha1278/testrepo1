@@ -13,12 +13,11 @@
         "type": "array",
         "defaultValue": ["10.0.0.0/16"]
       },
-      "subnetName": {
-        "type": "string"
-      },
-      "subnetPrefix": {
-        "type": "string",
-        "defaultValue": "10.0.1.0/24"
+      "subnets": {
+        "type": "array",
+        "metadata": {
+          "description": "Array of subnets to create in the virtual network."
+        }
       }
     },
     "resources": [
@@ -31,21 +30,14 @@
           "addressSpace": {
             "addressPrefixes": "[parameters('addressPrefixes')]"
           },
-          "subnets": [
-            {
-              "name": "[parameters('subnetName')]",
-              "properties": {
-                "addressPrefix": "[parameters('subnetPrefix')]"
-              }
-            }
-          ]
+          "subnets": "[parameters('subnets')]"
         }
       }
     ],
     "outputs": {
-      "subnetId": {
-        "type": "string",
-        "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]"
+      "subnetIds": {
+        "type": "array",
+        "value": "[array(parameters('subnets')[*].id)]"
       }
     }
   }

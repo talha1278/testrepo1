@@ -2,8 +2,11 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-      "firewallPolicyName": {
-        "type": "string"
+      "firewallPolicies": {
+        "type": "array",
+        "metadata": {
+          "description": "Array of firewall policies to create."
+        }
       },
       "location": {
         "type": "string",
@@ -14,19 +17,23 @@
       {
         "type": "Microsoft.Network/firewallPolicies",
         "apiVersion": "2021-02-01",
-        "name": "[parameters('firewallPolicyName')]",
+        "name": "[concat(parameters('firewallPolicies')[copyIndex()].name)]",
         "location": "[parameters('location')]",
         "properties": {
           "sku": {
             "tier": "Standard"
           }
+        },
+        "copy": {
+          "name": "firewallPolicyLoop",
+          "count": "[length(parameters('firewallPolicies'))]"
         }
       }
     ],
     "outputs": {
-      "firewallPolicyId": {
-        "type": "string",
-        "value": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicyName'))]"
+      "firewallPolicyIds": {
+        "type": "array",
+        "value": "[array(parameters('firewallPolicies')[*].id)]"
       }
     }
   }
