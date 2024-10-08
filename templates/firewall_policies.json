@@ -33,7 +33,7 @@
     "outputs": {
       "firewallPolicyIds": {
         "type": "array",
-        "value": "[array(map(parameters('firewallPolicies'), 'id', resourceId('Microsoft.Network/firewallPolicies', item().name)))]"
+        "value": "[concat(parameters('firewallPolicies'), 'name')]"
       }
     }
   }
