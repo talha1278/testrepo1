@@ -3,10 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "firewallPolicies": {
-        "type": "array",
-        "metadata": {
-          "description": "Array of firewall policies to create."
-        }
+        "type": "array"
       },
       "location": {
         "type": "string",
@@ -33,7 +30,7 @@
     "outputs": {
       "firewallPolicyIds": {
         "type": "array",
-        "value": "[parameters('firewallPolicies')]"
+        "value": "[array(parameters('firewallPolicies')[copyIndex()].name)]"
       }
     }
-}
+  }
