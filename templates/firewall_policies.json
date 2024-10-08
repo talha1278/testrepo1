@@ -33,7 +33,7 @@
     "outputs": {
         "firewallPolicyIds": {
             "type": "array",
-            "value": "[arrayConcat(references('firewallPolicyLoop').outputs[].id)]"
+            "value": "[range(0, length(parameters('firewallPolicies')))]"
         }
     }
 }
