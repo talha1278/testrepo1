@@ -3,42 +3,36 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "publicIPAddressName": {
-      "type": "string",
-      "defaultValue": "dev-public-ip"
+      "type": "string"
     },
     "natGatewayName": {
-      "type": "string",
-      "defaultValue": "dev-nat-gateway"
+      "type": "string"
     },
     "firewallName": {
-      "type": "string",
-      "defaultValue": "dev-firewall"
+      "type": "string"
     },
     "firewallPublicIpName": {
-      "type": "string",
-      "defaultValue": "dev-firewall-pip"
+      "type": "string"
     },
     "vnetName": {
-      "type": "string",
-      "defaultValue": "dev-vnet"
+      "type": "string"
     },
     "armVnetAddressSpaceCIDR": {
-      "type": "string",
-      "defaultValue": "10.0.0.0/16"
+      "type": "string"
     },
     "subnets": {
       "type": "array",
       "defaultValue": [
         {
-          "name": "AzureFirewallSubnet",
+          "name": "[parameters('subnet1Name')]",
           "properties": {
-            "addressPrefix": "10.0.1.0/24"
+            "addressPrefix": "[parameters('subnet1Prefix')]"
           }
         },
         {
-          "name": "AppSubnet",
+          "name": "[parameters('subnet2Name')]",
           "properties": {
-            "addressPrefix": "10.0.2.0/24"
+            "addressPrefix": "[parameters('subnet2Prefix')]"
           }
         }
       ]
@@ -47,16 +41,15 @@
       "type": "array",
       "defaultValue": [
         {
-          "name": "dev-firewall-policy-1"
+          "name": "[parameters('firewallPolicy1Name')]"
         },
         {
-          "name": "dev-firewall-policy-2"
+          "name": "[parameters('firewallPolicy2Name')]"
         }
       ]
     },
     "location": {
-      "type": "string",
-      "defaultValue": "eastus"
+      "type": "string"
     }
   },
   "resources": [
@@ -125,8 +118,8 @@
         },
         "parameters": {
           "virtualNetworkName": { "value": "[parameters('vnetName')]" },
-          "subnetName": { "value": "AzureFirewallSubnet" },
-          "subnetAddressPrefix": { "value": "10.0.1.0/24" },
+          "subnetName": { "value": "[parameters('subnet1Name')]" },
+          "subnetAddressPrefix": { "value": "[parameters('subnet1Prefix')]" },
           "serviceEndpointList": { "value": [] },
           "delegations": { "value": [] },
           "routeTable": { "value": {} },
@@ -185,9 +178,9 @@
         "parameters": {
           "firewallName": { "value": "[parameters('firewallName')]" },
           "location": { "value": "[parameters('location')]" },
-          "firewallSubnetId": { "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), 'AzureFirewallSubnet')]" },
+          "firewallSubnetId": { "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnet1Name'))]" },
           "firewallPublicIpId": { "value": "[reference('FirewallPublicIPDeployment').outputs.PublicIpAddressResourceId.value]" },
-          "firewallPolicyId": { "value": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicies')[0].name)]" }
+          "firewallPolicyId": { "value": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicy1Name'))]" }
         }
       }
     }
