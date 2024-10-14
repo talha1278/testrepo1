@@ -21,6 +21,18 @@
         "description": "The resource ID of the Public IP to associate with the NAT Gateway."
       }
     },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the subnet where the NAT Gateway will be associated."
+      }
+    },
+    "virtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "description": "The name of the Virtual Network where the subnet exists."
+      }
+    },
     "idleTimeoutInMinutes": {
       "type": "int",
       "defaultValue": 4,
@@ -45,6 +57,19 @@
           }
         ],
         "idleTimeoutInMinutes": "[parameters('idleTimeoutInMinutes')]"
+      }
+    },
+    {
+      "type": "Microsoft.Network/virtualNetworks/subnets",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('virtualNetworkName'), '/', parameters('subnetName'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/natGateways', parameters('natGatewayName'))]"
+      ],
+      "properties": {
+        "natGateway": {
+          "id": "[resourceId('Microsoft.Network/natGateways', parameters('natGatewayName'))]"
+        }
       }
     }
   ],

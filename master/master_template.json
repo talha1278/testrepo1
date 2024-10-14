@@ -36,6 +36,28 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
+      "name": "SubnetUpdateDeployment",
+      "dependsOn": [ "VNetDeployment" ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/subnet.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "virtualNetworkName": { "value": "[parameters('vnetName')]" },
+          "subnetName": { "value": "[parameters('subnet1Name')]" },
+          "subnetAddressPrefix": { "value": "[parameters('subnet1Prefix')]" },
+          "serviceEndpointList": { "value": [] },
+          "delegations": { "value": [] },
+          "routeTable": { "value": {} },
+          "networkSecurityGroup": { "value": {} }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
       "name": "PublicIPDeployment",
       "dependsOn": [ "VNetDeployment" ],
       "properties": {
@@ -55,7 +77,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "NatGatewayDeployment",
-      "dependsOn": [ "PublicIPDeployment" ],
+      "dependsOn": [ "PublicIPDeployment", "SubnetUpdateDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -65,29 +87,9 @@
         "parameters": {
           "natGatewayName": { "value": "[parameters('natGatewayName')]" },
           "location": { "value": "[parameters('location')]" },
-          "publicIpId": { "value": "[reference('PublicIPDeployment').outputs.PublicIpAddressResourceId.value]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "SubnetUpdateDeployment",
-      "dependsOn": [ "NatGatewayDeployment" ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/subnet.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
+          "publicIpId": { "value": "[reference('PublicIPDeployment').outputs.PublicIpAddressResourceId.value]" },
           "virtualNetworkName": { "value": "[parameters('vnetName')]" },
-          "subnetName": { "value": "[parameters('subnet1Name')]" },
-          "subnetAddressPrefix": { "value": "[parameters('subnet1Prefix')]" },
-          "serviceEndpointList": { "value": [] },
-          "delegations": { "value": [] },
-          "routeTable": { "value": {} },
-          "networkSecurityGroup": { "value": {} }
+          "subnetName": { "value": "[parameters('subnet1Name')]" }
         }
       }
     },
