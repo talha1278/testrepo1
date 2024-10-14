@@ -20,33 +20,23 @@
     "armVnetAddressSpaceCIDR": {
       "type": "string"
     },
-    "subnets": {
-      "type": "array",
-      "defaultValue": [
-        {
-          "name": "[parameters('subnet1Name')]",
-          "properties": {
-            "addressPrefix": "[parameters('subnet1Prefix')]"
-          }
-        },
-        {
-          "name": "[parameters('subnet2Name')]",
-          "properties": {
-            "addressPrefix": "[parameters('subnet2Prefix')]"
-          }
-        }
-      ]
+    "subnet1Name": {
+      "type": "string"
     },
-    "firewallPolicies": {
-      "type": "array",
-      "defaultValue": [
-        {
-          "name": "[parameters('firewallPolicy1Name')]"
-        },
-        {
-          "name": "[parameters('firewallPolicy2Name')]"
-        }
-      ]
+    "subnet1Prefix": {
+      "type": "string"
+    },
+    "subnet2Name": {
+      "type": "string"
+    },
+    "subnet2Prefix": {
+      "type": "string"
+    },
+    "firewallPolicy1Name": {
+      "type": "string"
+    },
+    "firewallPolicy2Name": {
+      "type": "string"
     },
     "location": {
       "type": "string"
@@ -123,9 +113,7 @@
           "serviceEndpointList": { "value": [] },
           "delegations": { "value": [] },
           "routeTable": { "value": {} },
-          "networkSecurityGroup": {
-            "value": {}
-          }
+          "networkSecurityGroup": { "value": {} }
         }
       }
     },
@@ -159,7 +147,7 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "firewallPolicies": { "value": "[parameters('firewallPolicies')]" },
+          "firewallPolicies": { "value": "[concat('[{\"name\": \"', parameters('firewallPolicy1Name'), '\"}, {\"name\": \"', parameters('firewallPolicy2Name'), '\"}]')]" },
           "location": { "value": "[parameters('location')]" }
         }
       }
