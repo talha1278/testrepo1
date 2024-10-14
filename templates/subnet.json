@@ -22,9 +22,8 @@
     },
     "natGatewayId": {
       "type": "string",
-      "defaultValue": "",
       "metadata": {
-        "description": "The resource ID of the NAT Gateway to associate with the subnet (optional)."
+        "description": "The resource ID of the NAT Gateway to associate with the subnet."
       }
     },
     "serviceEndpointList": {
