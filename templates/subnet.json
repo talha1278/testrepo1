@@ -1,5 +1,5 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "virtualNetworkName": {
@@ -20,6 +20,13 @@
         "description": "The address prefix of the subnet."
       }
     },
+    "natGatewayId": {
+      "type": "string",
+      "defaultValue": "",
+      "metadata": {
+        "description": "The resource ID of the NAT Gateway to associate with the subnet (optional)."
+      }
+    },
     "serviceEndpointList": {
       "type": "array",
       "defaultValue": [],
@@ -31,48 +38,36 @@
       "type": "array",
       "defaultValue": [],
       "metadata": {
-        "description": "An array of delegations. Object reference can be found here: https://docs.microsoft.com/en-us/azure/templates/microsoft.network/2018-11-01/virtualnetworks/subnets#Delegation"
+        "description": "An array of delegations."
       }
     },
     "routeTable": {
       "type": "object",
       "defaultValue": {},
       "metadata": {
-        "description": "An object of the route table. Object reference can be found here: https://docs.microsoft.com/en-us/azure/templates/microsoft.network/2018-11-01/virtualnetworks/subnets#routetable-object"
+        "description": "An object of the route table."
       }
     },
     "networkSecurityGroup": {
       "type": "object",
       "defaultValue": {},
       "metadata": {
-        "description": "An object of the Network Security Group. Object reference can be found here: https://docs.microsoft.com/en-us/azure/templates/microsoft.network/2018-11-01/virtualnetworks/subnets#NetworkSecurityGroup"
+        "description": "An object of the Network Security Group."
       }
     }
   },
   "variables": {
-    "copy": [
-      {
-        "name": "serviceEndPoints",
-        "count": "[if(greater(length(parameters('serviceEndpointList')), 0), length(parameters('serviceEndpointList')), 1)]",
-        "input": {
-          "service": "[if(greater(length(parameters('serviceEndpointList')), 0), parameters('serviceEndpointList')[copyIndex('serviceEndPoints')], json('null'))]"
-        }
-      }
-    ],
-    "serviceEndPointsEmpty": [],
-    "networkSecurityGroupSubnetProperty": {
-      "networkSecurityGroup": "[parameters('networkSecurityGroup')]"
-    },
-    "routeTableSubnetProperty": {
-      "routeTable": "[parameters('routeTable')]"
-    },
     "baseSubnetProperties": {
       "addressPrefix": "[parameters('subnetAddressPrefix')]",
-      "serviceEndpoints": "[if(greater(length(parameters('serviceEndpointList')), 0), variables('serviceEndPoints'), variables('serviceEndPointsEmpty'))]",
+      "serviceEndpoints": "[if(greater(length(parameters('serviceEndpointList')), 0), parameters('serviceEndpointList'), json('null'))]",
       "delegations": "[parameters('delegations')]"
     },
-    "networkSecurityGroupIncludedSubnetProperties": "[if(empty(parameters('networkSecurityGroup')), variables('baseSubnetProperties'), union(variables('baseSubnetProperties'), variables('networkSecurityGroupSubnetProperty')))]",
-    "subnetProperties": "[if(empty(parameters('routeTable')), variables('networkSecurityGroupIncludedSubnetProperties'), union(variables('networkSecurityGroupIncludedSubnetProperties'), variables('routeTableSubnetProperty')))]"
+    "natGatewayProperty": {
+      "natGateway": {
+        "id": "[parameters('natGatewayId')]"
+      }
+    },
+    "subnetProperties": "[if(empty(parameters('natGatewayId')), variables('baseSubnetProperties'), union(variables('baseSubnetProperties'), variables('natGatewayProperty')))]"
   },
   "resources": [
     {

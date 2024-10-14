@@ -36,28 +36,6 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "SubnetUpdateDeployment",
-      "dependsOn": [ "VNetDeployment" ],
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/subnet.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "virtualNetworkName": { "value": "[parameters('vnetName')]" },
-          "subnetName": { "value": "[parameters('subnet1Name')]" },
-          "subnetAddressPrefix": { "value": "[parameters('subnet1Prefix')]" },
-          "serviceEndpointList": { "value": [] },
-          "delegations": { "value": [] },
-          "routeTable": { "value": {} },
-          "networkSecurityGroup": { "value": {} }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
       "name": "PublicIPDeployment",
       "dependsOn": [ "VNetDeployment" ],
       "properties": {
@@ -77,7 +55,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "NatGatewayDeployment",
-      "dependsOn": [ "PublicIPDeployment", "SubnetUpdateDeployment" ],
+      "dependsOn": [ "PublicIPDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -87,9 +65,30 @@
         "parameters": {
           "natGatewayName": { "value": "[parameters('natGatewayName')]" },
           "location": { "value": "[parameters('location')]" },
-          "publicIpId": { "value": "[reference('PublicIPDeployment').outputs.PublicIpAddressResourceId.value]" },
+          "publicIpId": { "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]" }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "SubnetUpdateDeployment",
+      "dependsOn": [ "NatGatewayDeployment" ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/subnet.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
           "virtualNetworkName": { "value": "[parameters('vnetName')]" },
-          "subnetName": { "value": "[parameters('subnet1Name')]" }
+          "subnetName": { "value": "[parameters('subnet1Name')]" },
+          "subnetAddressPrefix": { "value": "[parameters('subnet1Prefix')]" },
+          "natGatewayId": { "value": "[resourceId('Microsoft.Network/natGateways', parameters('natGatewayName'))]" },
+          "serviceEndpointList": { "value": [] },
+          "delegations": { "value": [] },
+          "routeTable": { "value": {} },
+          "networkSecurityGroup": { "value": {} }
         }
       }
     },
@@ -148,7 +147,7 @@
           "firewallName": { "value": "[parameters('firewallName')]" },
           "location": { "value": "[parameters('location')]" },
           "firewallSubnetId": { "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnet1Name'))]" },
-          "firewallPublicIpId": { "value": "[reference('FirewallPublicIPDeployment').outputs.PublicIpAddressResourceId.value]" },
+          "firewallPublicIpId": { "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('firewallPublicIpName'))]" },
           "firewallPolicyId": { "value": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicy1Name'))]" }
         }
       }
