@@ -2,45 +2,19 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "publicIPAddressName": {
-      "type": "string"
-    },
-    "natGatewayName": {
-      "type": "string"
-    },
-    "firewallName": {
-      "type": "string"
-    },
-    "firewallPublicIpName": {
-      "type": "string"
-    },
-    "vnetName": {
-      "type": "string"
-    },
-    "armVnetAddressSpaceCIDR": {
-      "type": "string"
-    },
-    "subnet1Name": {
-      "type": "string"
-    },
-    "subnet1Prefix": {
-      "type": "string"
-    },
-    "subnet2Name": {
-      "type": "string"
-    },
-    "subnet2Prefix": {
-      "type": "string"
-    },
-    "firewallPolicy1Name": {
-      "type": "string"
-    },
-    "firewallPolicy2Name": {
-      "type": "string"
-    },
-    "location": {
-      "type": "string"
-    }
+    "publicIPAddressName": { "type": "string" },
+    "natGatewayName": { "type": "string" },
+    "firewallName": { "type": "string" },
+    "firewallPublicIpName": { "type": "string" },
+    "vnetName": { "type": "string" },
+    "armVnetAddressSpaceCIDR": { "type": "string" },
+    "subnet1Name": { "type": "string" },
+    "subnet1Prefix": { "type": "string" },
+    "subnet2Name": { "type": "string" },
+    "subnet2Prefix": { "type": "string" },
+    "firewallPolicy1Name": { "type": "string" },
+    "firewallPolicy2Name": { "type": "string" },
+    "location": { "type": "string" }
   },
   "resources": [
     {
@@ -147,7 +121,12 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "firewallPolicies": { "value": "[concat('[{\"name\": \"', parameters('firewallPolicy1Name'), '\"}, {\"name\": \"', parameters('firewallPolicy2Name'), '\"}]')]" },
+          "firewallPolicies": { 
+            "value": [
+              { "name": "[parameters('firewallPolicy1Name')]" },
+              { "name": "[parameters('firewallPolicy2Name')]" }
+            ]
+          },
           "location": { "value": "[parameters('location')]" }
         }
       }
@@ -172,5 +151,11 @@
         }
       }
     }
-  ]
+  ],
+  "outputs": {
+    "PublicIpAddressResourceId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+    }
+  }
 }
