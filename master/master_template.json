@@ -131,9 +131,7 @@
           "delegations": { "value": [] },
           "routeTable": { "value": {} },
           "networkSecurityGroup": {
-            "value": {
-              "id": "[reference('NatGatewayDeployment').outputs.natGatewayId.value]"
-            }
+            "value": {}
           }
         }
       }
