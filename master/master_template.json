@@ -15,15 +15,14 @@
     "firewallPolicy1Name": { "type": "string" },
     "firewallPolicy2Name": { "type": "string" },
     "location": { "type": "string" },
-    "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
-    "ruleCollectionGroupName": { "value": "[parameters('ruleCollectionGroupName')]" },
-    "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
-    "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
-    "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
-    "firewallRuleSourceAddresses": { "value": "[parameters('firewallRuleSourceAddresses')]" },
-    "firewallRuleDestinationAddresses": { "value": "[parameters('firewallRuleDestinationAddresses')]" },
-    "firewallRuleDestinationPorts": { "value": "[parameters('firewallRuleDestinationPorts')]" },
-    "firewallRuleProtocol": { "value": "[parameters('firewallRuleProtocol')]" }
+    "ruleCollectionGroupName": { "type": "string" },
+    "firewallRuleName": { "type": "string" },
+    "firewallRulePriority": { "type": "int" },
+    "firewallRuleAction": { "type": "string" },
+    "firewallRuleSourceAddresses": { "type": "array" },
+    "firewallRuleDestinationAddresses": { "type": "array" },
+    "firewallRuleDestinationPorts": { "type": "array" },
+    "firewallRuleProtocol": { "type": "string" }
   },
   "resources": [
     {
@@ -174,7 +173,7 @@
         },
         "parameters": {
           "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
-          "ruleCollectionGroupName": { "value": "default" },
+          "ruleCollectionGroupName": { "value": "[parameters('ruleCollectionGroupName')]" },
           "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
           "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
           "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
