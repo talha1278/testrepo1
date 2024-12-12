@@ -1,0 +1,50 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "firewallPolicyName": { "type": "string" },
+    "ruleCollectionGroupName": { "type": "string" },
+    "firewallRuleName": { "type": "string" },
+    "firewallRulePriority": { "type": "int" },
+    "firewallRuleAction": { "type": "string" },
+    "firewallRuleSourceAddresses": { "type": "array" },
+    "firewallRuleProtocol": { "type": "array" },
+    "firewallRuleFqdnTags": { "type": "array" },
+    "firewallRuleTargetFqdns": { "type": "array" },
+    "firewallRuleTargetUrls": { "type": "array" },
+    "firewallRuleHttpHeadersToInsert": { "type": "array" }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+      "apiVersion": "2024-01-01",
+      "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
+      "properties": {
+        "priority": "[parameters('firewallRulePriority')]",
+        "ruleCollections": [
+          {
+            "name": "[parameters('firewallRuleName')]",
+            "priority": "[parameters('firewallRulePriority')]",
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+            "action": {
+              "type": "[parameters('firewallRuleAction')]"
+            },
+            "rules": [
+              {
+                "ruleType": "ApplicationRule",
+                "name": "[parameters('firewallRuleName')]",
+                "protocols": "[parameters('firewallRuleProtocol')]",
+                "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
+                "fqdnTags": "[parameters('firewallRuleFqdnTags')]",
+                "targetFqdns": "[parameters('firewallRuleTargetFqdns')]",
+                "targetUrls": "[parameters('firewallRuleTargetUrls')]",
+                "httpHeadersToInsert": "[parameters('firewallRuleHttpHeadersToInsert')]",
+                "terminateTLS": false
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
