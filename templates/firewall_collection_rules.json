@@ -52,17 +52,17 @@
       }
     },
     "firewallRuleProtocol": {
-      "type": "string",
-      "allowedValues": ["TCP", "UDP", "Any"],
+      "type": "array",
+      "allowedValues": [["TCP"], ["UDP"], ["Any"]],
       "metadata": {
-        "description": "Protocol for the firewall rule. Allowed values are 'TCP', 'UDP', or 'Any'."
+        "description": "IP protocols for the firewall rule. Allowed values are 'TCP', 'UDP', or 'Any'."
       }
     }
   },
   "resources": [
     {
       "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-      "apiVersion": "2021-02-01",
+      "apiVersion": "2024-05-01",
       "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
         "priority": "[parameters('firewallRulePriority')]",
@@ -81,9 +81,7 @@
                 "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
                 "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
                 "destinationPorts": "[parameters('firewallRuleDestinationPorts')]",
-                "protocols": [
-                  "[parameters('firewallRuleProtocol')]"
-                ]
+                "ipProtocols": "[parameters('firewallRuleProtocol')]"
               }
             ]
           }
