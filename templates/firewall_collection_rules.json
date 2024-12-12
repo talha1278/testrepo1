@@ -3,22 +3,40 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "firewallName": { "type": "string" },
-    "firewallRules": {
-      "type": "array",
-      "defaultValue": [],
-      "metadata": {
-        "description": "Array of firewall rules to deploy. Each rule includes name, priority, action, and rule conditions."
-      }
-    }
+    "firewallRuleName": { "type": "string" },
+    "firewallRulePriority": { "type": "int" },
+    "firewallRuleAction": { "type": "string" },
+    "firewallRuleSourceAddresses": { "type": "array" },
+    "firewallRuleDestinationAddresses": { "type": "array" },
+    "firewallRuleDestinationPorts": { "type": "array" },
+    "firewallRuleProtocol": { "type": "string" }
   },
   "resources": [
     {
-      "type": "Microsoft.Network/azureFirewalls/rules",
+      "type": "Microsoft.Network/azureFirewalls/ruleCollectionGroups",
       "apiVersion": "2021-08-01",
-      "name": "[concat(parameters('firewallName'), '/ruleCollectionGroup')]",
+      "name": "[concat(parameters('firewallName'), '/default')]",
       "properties": {
-        "priority": 100,
-        "ruleCollections": "[parameters('firewallRules')]"
+        "priority": "[parameters('firewallRulePriority')]",
+        "ruleCollections": [
+          {
+            "name": "[parameters('firewallRuleName')]",
+            "priority": "[parameters('firewallRulePriority')]",
+            "action": {
+              "type": "[parameters('firewallRuleAction')]"
+            },
+            "rules": [
+              {
+                "name": "[parameters('firewallRuleName')]",
+                "ruleType": "NetworkRule",
+                "protocols": [ "[parameters('firewallRuleProtocol')]" ],
+                "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
+                "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
+                "destinationPorts": "[parameters('firewallRuleDestinationPorts')]"
+              }
+            ]
+          }
+        ]
       }
     }
   ]
