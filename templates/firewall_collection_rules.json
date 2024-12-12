@@ -52,10 +52,10 @@
       }
     },
     "firewallRuleProtocol": {
-      "type": "array",
-      "allowedValues": [["TCP"], ["UDP"], ["Any"], ["TCP", "UDP"]],
+      "type": "string",
+      "allowedValues": ["TCP", "UDP", "Any"],
       "metadata": {
-        "description": "Protocol(s) for the firewall rule. Use 'Any' or a combination of 'TCP' and 'UDP'."
+        "description": "Protocol for the firewall rule. Allowed values are 'TCP', 'UDP', or 'Any'."
       }
     }
   },
@@ -81,7 +81,9 @@
                 "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
                 "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
                 "destinationPorts": "[parameters('firewallRuleDestinationPorts')]",
-                "protocols": "[parameters('firewallRuleProtocol')]"
+                "protocols": [
+                  "[parameters('firewallRuleProtocol')]"
+                ]
               }
             ]
           }
