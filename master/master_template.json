@@ -15,14 +15,27 @@
     "firewallPolicy1Name": { "type": "string" },
     "firewallPolicy2Name": { "type": "string" },
     "location": { "type": "string" },
-    "ruleCollectionGroupName": { "type": "string" },
-    "firewallRuleName": { "type": "string" },
-    "firewallRulePriority": { "type": "int" },
-    "firewallRuleAction": { "type": "string" },
-    "firewallRuleSourceAddresses": { "type": "array" },
-    "firewallRuleDestinationAddresses": { "type": "array" },
-    "firewallRuleDestinationPorts": { "type": "array" },
-    "firewallRuleProtocol": { "type": "string" }
+
+    "networkRuleCollectionGroupName": { "type": "string" },
+    "applicationRuleCollectionGroupName": { "type": "string" },
+
+    "networkRuleName": { "type": "string" },
+    "networkRulePriority": { "type": "int" },
+    "networkRuleAction": { "type": "string" },
+    "networkRuleSourceAddresses": { "type": "array" },
+    "networkRuleDestinationAddresses": { "type": "array" },
+    "networkRuleDestinationPorts": { "type": "array" },
+    "networkRuleIpProtocols": { "type": "array" },
+
+    "applicationRuleName": { "type": "string" },
+    "applicationRulePriority": { "type": "int" },
+    "applicationRuleAction": { "type": "string" },
+    "applicationRuleSourceAddresses": { "type": "array" },
+    "applicationRuleProtocol": { "type": "array" },
+    "applicationRuleFqdnTags": { "type": "array" },
+    "applicationRuleTargetFqdns": { "type": "array" },
+    "applicationRuleTargetUrls": { "type": "array" },
+    "applicationRuleHttpHeadersToInsert": { "type": "array" }
   },
   "resources": [
     {
@@ -163,32 +176,52 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "FirewallPolicyRuleCollectionGroupDeployment",
+      "name": "NetworkRuleCollectionDeployment",
       "dependsOn": [ "FirewallPoliciesDeployment", "AzureFirewallDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/firewall_collection_rules.json",
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/firewall_network_rule_collection_rule.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
           "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
-          "ruleCollectionGroupName": { "value": "[parameters('ruleCollectionGroupName')]" },
-          "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
-          "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
-          "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
-          "firewallRuleSourceAddresses": { "value": "[parameters('firewallRuleSourceAddresses')]" },
-          "firewallRuleDestinationAddresses": { "value": "[parameters('firewallRuleDestinationAddresses')]" },
-          "firewallRuleDestinationPorts": { "value": "[parameters('firewallRuleDestinationPorts')]" },
-          "firewallRuleProtocol": { "value": "[parameters('firewallRuleProtocol')]" }
+          "ruleCollectionGroupName": { "value": "[parameters('networkRuleCollectionGroupName')]" },
+          "firewallRuleName": { "value": "[parameters('networkRuleName')]" },
+          "firewallRulePriority": { "value": "[parameters('networkRulePriority')]" },
+          "firewallRuleAction": { "value": "[parameters('networkRuleAction')]" },
+          "firewallRuleSourceAddresses": { "value": "[parameters('networkRuleSourceAddresses')]" },
+          "firewallRuleDestinationAddresses": { "value": "[parameters('networkRuleDestinationAddresses')]" },
+          "firewallRuleDestinationPorts": { "value": "[parameters('networkRuleDestinationPorts')]" },
+          "firewallRuleIpProtocols": { "value": "[parameters('networkRuleIpProtocols')]" }
         }
       }
-    }  
-  ],
-  "outputs": {
-    "PublicIpAddressResourceId": {
-      "type": "string",
-      "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressName'))]"
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "ApplicationRuleCollectionDeployment",
+      "dependsOn": [ "FirewallPoliciesDeployment", "AzureFirewallDeployment" ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/firewall_application_rule_collection_rule.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "firewallPolicyName": { "value": "[parameters('firewallPolicy2Name')]" },
+          "ruleCollectionGroupName": { "value": "[parameters('applicationRuleCollectionGroupName')]" },
+          "firewallRuleName": { "value": "[parameters('applicationRuleName')]" },
+          "firewallRulePriority": { "value": "[parameters('applicationRulePriority')]" },
+          "firewallRuleAction": { "value": "[parameters('applicationRuleAction')]" },
+          "firewallRuleSourceAddresses": { "value": "[parameters('applicationRuleSourceAddresses')]" },
+          "firewallRuleProtocol": { "value": "[parameters('applicationRuleProtocol')]" },
+          "firewallRuleFqdnTags": { "value": "[parameters('applicationRuleFqdnTags')]" },
+          "firewallRuleTargetFqdns": { "value": "[parameters('applicationRuleTargetFqdns')]" },
+          "firewallRuleTargetUrls": { "value": "[parameters('applicationRuleTargetUrls')]" },
+          "firewallRuleHttpHeadersToInsert": { "value": "[parameters('applicationRuleHttpHeadersToInsert')]" }
+        }
+      }
     }
-  }
+  ]
 }
