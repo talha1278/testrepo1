@@ -48,12 +48,10 @@
                 "destinationAddresses": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationAddresses'), json('null'))]",
                 "destinationPorts": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationPorts'), json('null'))]",
                 "ipProtocols": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleProtocol'), json('null'))]",
-                "translatedAddress": "[if(equals(parameters('ruleType'), 'NatRule'), parameters('firewallRuleTranslatedAddress'), json('null'))]",
-                "translatedPort": "[if(equals(parameters('ruleType'), 'NatRule'), parameters('firewallRuleTranslatedPort'), json('null'))]",
                 "fqdnTags": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleFqdnTags'), json('null'))]",
                 "targetFqdns": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetFqdns'), json('null'))]",
                 "targetUrls": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetUrls'), json('null'))]",
-                "httpHeadersToInsert": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleHttpHeadersToInsert'), json('null'))]"
+                "httpHeadersToInsert": "[if(and(equals(parameters('ruleType'), 'ApplicationRule'), not(empty(parameters('firewallRuleHttpHeadersToInsert')))), parameters('firewallRuleHttpHeadersToInsert'), json('null'))]"
               }
             ]
           }
