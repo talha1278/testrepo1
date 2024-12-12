@@ -14,7 +14,7 @@
       "type": "string",
       "allowedValues": ["NetworkRule", "NatRule", "ApplicationRule"]
     },
-    "firewallRuleSourceAddresses": { "type": "array" },
+    "firewallRuleSourceAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationPorts": { "type": "array", "defaultValue": [] },
     "firewallRuleProtocol": { "type": "array", "defaultValue": [] },
@@ -23,10 +23,7 @@
     "firewallRuleFqdnTags": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetFqdns": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetUrls": { "type": "array", "defaultValue": [] },
-    "firewallRuleHttpHeadersToInsert": {
-      "type": "array",
-      "defaultValue": []
-    }
+    "firewallRuleHttpHeadersToInsert": { "type": "array", "defaultValue": [] }
   },
   "resources": [
     {
