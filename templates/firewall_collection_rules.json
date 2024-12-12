@@ -42,15 +42,15 @@
               {
                 "ruleType": "[parameters('ruleType')]",
                 "name": "[parameters('firewallRuleName')]",
-                "protocols": "[if(equals(parameters('ruleType'), 'ApplicationRule'), json('[{\"protocolType\":\"Http\",\"port\":80}]'), json('null'))]",
+                "protocols": "[if(equals(parameters('ruleType'), 'ApplicationRule'), json('[{\"protocolType\":\"Http\",\"port\":80}]'), null)]",
                 "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
-                "destinationAddresses": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationAddresses'), json('null'))]",
-                "destinationPorts": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationPorts'), json('null'))]",
-                "fqdnTags": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleFqdnTags'), json('null'))]",
-                "targetFqdns": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetFqdns'), json('null'))]",
-                "targetUrls": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetUrls'), json('null'))]",
-                "httpHeadersToInsert": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleHttpHeadersToInsert'), json('null'))]",
-                "terminateTLS": "[if(equals(parameters('ruleType'), 'ApplicationRule'), false, json('null'))]"
+                "destinationAddresses": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationAddresses'), null)]",
+                "destinationPorts": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationPorts'), null)]",
+                "fqdnTags": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleFqdnTags'), null)]",
+                "targetFqdns": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetFqdns'), null)]",
+                "targetUrls": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetUrls'), null)]",
+                "httpHeadersToInsert": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleHttpHeadersToInsert'), null)]",
+                "terminateTLS": "[if(equals(parameters('ruleType'), 'ApplicationRule'), false, null)]"
               }
             ]
           }
