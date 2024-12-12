@@ -17,7 +17,8 @@
     "firewallRuleSourceAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationPorts": { "type": "array", "defaultValue": [] },
-    "firewallRuleProtocol": { "type": "array", "defaultValue": [] },
+    "firewallRuleProtocolPorts": { "type": "array", "defaultValue": [] },
+    "firewallRuleProtocolTypes": { "type": "array", "defaultValue": [] },
     "firewallRuleIpProtocols": { "type": "array", "defaultValue": [] },
     "firewallRuleFqdnTags": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetFqdns": { "type": "array", "defaultValue": [] },
@@ -43,7 +44,7 @@
               {
                 "ruleType": "[parameters('ruleType')]",
                 "name": "[parameters('firewallRuleName')]",
-                "protocols": "[if(equals(parameters('ruleType'), 'ApplicationRule'), createArray(createObject('protocolType', 'Http', 'port', 80), createObject('protocolType', 'Https', 'port', 443)), null)]",
+                "protocols": "[if(equals(parameters('ruleType'), 'ApplicationRule'), array(createObject('port', parameters('firewallRuleProtocolPorts')[0], 'protocolType', parameters('firewallRuleProtocolTypes')[0])), null)]",
                 "ipProtocols": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleIpProtocols'), null)]",
                 "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
                 "destinationAddresses": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationAddresses'), null)]",
