@@ -2,7 +2,8 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "firewallName": { "type": "string" },
+    "firewallPolicyName": { "type": "string" },
+    "ruleCollectionGroupName": { "type": "string", "defaultValue": "default" },
     "firewallRuleName": { "type": "string" },
     "firewallRulePriority": { "type": "int" },
     "firewallRuleAction": { "type": "string" },
@@ -13,9 +14,9 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Network/azureFirewalls/ruleCollectionGroups",
+      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
       "apiVersion": "2021-08-01",
-      "name": "[concat(parameters('firewallName'), '/default')]",
+      "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
         "priority": "[parameters('firewallRulePriority')]",
         "ruleCollections": [
