@@ -6,16 +6,25 @@
     "ruleCollectionGroupName": { "type": "string" },
     "firewallRuleName": { "type": "string" },
     "firewallRulePriority": { "type": "int" },
-    "firewallRuleAction": { "type": "string", "allowedValues": ["Allow", "Deny"] },
-    "ruleType": { "type": "string", "allowedValues": ["NetworkRule", "NatRule", "ApplicationRule"] },
+    "firewallRuleAction": {
+      "type": "string",
+      "allowedValues": ["Allow", "Deny"]
+    },
+    "ruleType": {
+      "type": "string",
+      "allowedValues": ["NetworkRule", "NatRule", "ApplicationRule"]
+    },
     "firewallRuleSourceAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationPorts": { "type": "array", "defaultValue": [] },
     "firewallRuleProtocol": { "type": "array", "defaultValue": [] },
+    "firewallRuleTranslatedAddress": { "type": "string", "defaultValue": "" },
+    "firewallRuleTranslatedPort": { "type": "string", "defaultValue": "" },
     "firewallRuleFqdnTags": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetFqdns": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetUrls": { "type": "array", "defaultValue": [] },
-    "firewallRuleHttpHeadersToInsert": { "type": "array", "defaultValue": [] }
+    "firewallRuleHttpHeadersToInsert": { "type": "array", "defaultValue": [] },
+    "firewallRuleTerminateTLS": { "type": "bool", "defaultValue": false }
   },
   "resources": [
     {
@@ -40,26 +49,18 @@
                 "destinationAddresses": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationAddresses'), json('null'))]",
                 "destinationPorts": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationPorts'), json('null'))]",
                 "ipProtocols": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleProtocol'), json('null'))]",
+                "translatedAddress": "[if(equals(parameters('ruleType'), 'NatRule'), parameters('firewallRuleTranslatedAddress'), json('null'))]",
+                "translatedPort": "[if(equals(parameters('ruleType'), 'NatRule'), parameters('firewallRuleTranslatedPort'), json('null'))]",
                 "fqdnTags": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleFqdnTags'), json('null'))]",
                 "targetFqdns": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetFqdns'), json('null'))]",
                 "targetUrls": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetUrls'), json('null'))]",
-                "httpHeadersToInsert": "[if(and(equals(parameters('ruleType'), 'ApplicationRule'), not(empty(parameters('firewallRuleHttpHeadersToInsert')))), parameters('firewallRuleHttpHeadersToInsert'), json('null'))]"
+                "httpHeadersToInsert": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleHttpHeadersToInsert'), json('null'))]",
+                "terminateTLS": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTerminateTLS'), json('null'))]"
               }
             ]
           }
         ]
       }
     }
-  ],
-  "outputs": {
-    "debugRules": {
-      "type": "object",
-      "value": {
-        "ruleName": "[parameters('firewallRuleName')]",
-        "ruleType": "[parameters('ruleType')]",
-        "httpHeadersToInsert": "[parameters('firewallRuleHttpHeadersToInsert')]",
-        "targetUrls": "[parameters('firewallRuleTargetUrls')]"
-      }
-    }
-  }
+  ]
 }
