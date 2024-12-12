@@ -151,6 +151,23 @@
           "firewallPolicyId": { "value": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicy1Name'))]" }
         }
       }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "FirewallCollectionRulesDeployment",
+      "dependsOn": [ "AzureFirewallDeployment" ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/firewall_collection_rules.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "firewallName": { "value": "[parameters('firewallName')]" },
+          "firewallRules": { "value": "[parameters('firewallRules')]" }
+        }
+      }
     }
   ],
   "outputs": {
