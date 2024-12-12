@@ -16,7 +16,7 @@
     "firewallPolicy2Name": { "type": "string" },
     "location": { "type": "string" },
     "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
-    "ruleCollectionGroupName": { "value": "default" },
+    "ruleCollectionGroupName": { "value": "[parameters('ruleCollectionGroupName')]" },
     "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
     "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
     "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
