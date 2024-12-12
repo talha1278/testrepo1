@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "firewallName": { "type": "string" },
+    "firewallRules": {
+      "type": "array",
+      "defaultValue": [],
+      "metadata": {
+        "description": "Array of firewall rules to deploy. Each rule includes name, priority, action, and rule conditions."
+      }
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Network/azureFirewalls/rules",
+      "apiVersion": "2021-08-01",
+      "name": "[concat(parameters('firewallName'), '/ruleCollectionGroup')]",
+      "properties": {
+        "priority": 100,
+        "ruleCollections": "[parameters('firewallRules')]"
+      }
+    }
+  ]
+}
