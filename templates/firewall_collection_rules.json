@@ -2,38 +2,92 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "firewallPolicy1Name": { "type": "string" },
-    "ruleCollectionGroupName": { "type": "string" },
-    "firewallRuleName": { "type": "string" },
-    "firewallRulePriority": { "type": "int" },
-    "firewallRuleAction": { "type": "string" },
-    "firewallRuleSourceAddresses": { "type": "array" },
-    "firewallRuleDestinationAddresses": { "type": "array" },
-    "firewallRuleDestinationPorts": { "type": "array" },
-    "firewallRuleProtocol": { "type": "string" }
+    "firewallPolicyName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Azure Firewall Policy"
+      }
+    },
+    "ruleCollectionGroupName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Rule Collection Group"
+      }
+    },
+    "firewallRuleName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the firewall rule"
+      }
+    },
+    "firewallRulePriority": {
+      "type": "int",
+      "metadata": {
+        "description": "Priority of the firewall rule"
+      }
+    },
+    "firewallRuleAction": {
+      "type": "string",
+      "allowedValues": ["Allow", "Deny"],
+      "metadata": {
+        "description": "Action for the firewall rule"
+      }
+    },
+    "firewallRuleSourceAddresses": {
+      "type": "array",
+      "metadata": {
+        "description": "Source addresses for the firewall rule"
+      }
+    },
+    "firewallRuleDestinationAddresses": {
+      "type": "array",
+      "metadata": {
+        "description": "Destination addresses for the firewall rule"
+      }
+    },
+    "firewallRuleDestinationPorts": {
+      "type": "array",
+      "metadata": {
+        "description": "Destination ports for the firewall rule"
+      }
+    },
+    "firewallRuleProtocol": {
+      "type": "string",
+      "allowedValues": ["TCP", "UDP", "Any"],
+      "metadata": {
+        "description": "Protocol for the firewall rule"
+      }
+    }
   },
   "resources": [
     {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
-      "name": "FirewallPolicyRuleCollectionGroupDeployment",
+      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
+      "apiVersion": "2021-02-01",
+      "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/firewall_collection_rules.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
-          "ruleCollectionGroupName": { "value": "[parameters('ruleCollectionGroupName')]" },
-          "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
-          "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
-          "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
-          "firewallRuleSourceAddresses": { "value": "[parameters('firewallRuleSourceAddresses')]" },
-          "firewallRuleDestinationAddresses": { "value": "[parameters('firewallRuleDestinationAddresses')]" },
-          "firewallRuleDestinationPorts": { "value": "[parameters('firewallRuleDestinationPorts')]" },
-          "firewallRuleProtocol": { "value": "[parameters('firewallRuleProtocol')]" }
-        }
+        "priority": "[parameters('firewallRulePriority')]",
+        "ruleCollections": [
+          {
+            "name": "[parameters('firewallRuleName')]",
+            "priority": "[parameters('firewallRulePriority')]",
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+            "action": {
+              "type": "[parameters('firewallRuleAction')]"
+            },
+            "rules": [
+              {
+                "name": "[parameters('firewallRuleName')]",
+                "ruleType": "NetworkRule",
+                "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
+                "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
+                "destinationPorts": "[parameters('firewallRuleDestinationPorts')]",
+                "protocols": [
+                  "[parameters('firewallRuleProtocol')]"
+                ]
+              }
+            ]
+          }
+        ]
       }
     }
   ]
