@@ -42,7 +42,7 @@
               {
                 "ruleType": "[parameters('ruleType')]",
                 "name": "[parameters('firewallRuleName')]",
-                "protocols": "[if(equals(parameters('ruleType'), 'ApplicationRule'), json('[{\"protocolType\":\"Http\",\"port\":80}]'), null)]",
+                "protocols": "[if(equals(parameters('ruleType'), 'ApplicationRule'), array(createObject('protocolType', 'Http', 'port', 80)), null)]",
                 "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
                 "destinationAddresses": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationAddresses'), null)]",
                 "destinationPorts": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationPorts'), null)]",
