@@ -6,20 +6,12 @@
     "ruleCollectionGroupName": { "type": "string" },
     "firewallRuleName": { "type": "string" },
     "firewallRulePriority": { "type": "int" },
-    "firewallRuleAction": {
-      "type": "string",
-      "allowedValues": ["Allow", "Deny"]
-    },
-    "ruleType": {
-      "type": "string",
-      "allowedValues": ["NetworkRule", "NatRule", "ApplicationRule"]
-    },
+    "firewallRuleAction": { "type": "string", "allowedValues": ["Allow", "Deny"] },
+    "ruleType": { "type": "string", "allowedValues": ["NetworkRule", "NatRule", "ApplicationRule"] },
     "firewallRuleSourceAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationAddresses": { "type": "array", "defaultValue": [] },
     "firewallRuleDestinationPorts": { "type": "array", "defaultValue": [] },
     "firewallRuleProtocol": { "type": "array", "defaultValue": [] },
-    "firewallRuleTranslatedAddress": { "type": "string", "defaultValue": "" },
-    "firewallRuleTranslatedPort": { "type": "string", "defaultValue": "" },
     "firewallRuleFqdnTags": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetFqdns": { "type": "array", "defaultValue": [] },
     "firewallRuleTargetUrls": { "type": "array", "defaultValue": [] },
@@ -58,5 +50,16 @@
         ]
       }
     }
-  ]
+  ],
+  "outputs": {
+    "debugRules": {
+      "type": "object",
+      "value": {
+        "ruleName": "[parameters('firewallRuleName')]",
+        "ruleType": "[parameters('ruleType')]",
+        "httpHeadersToInsert": "[parameters('firewallRuleHttpHeadersToInsert')]",
+        "targetUrls": "[parameters('firewallRuleTargetUrls')]"
+      }
+    }
+  }
 }
