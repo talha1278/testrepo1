@@ -2,61 +2,30 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "firewallPolicyName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the Azure Firewall Policy"
-      }
-    },
-    "ruleCollectionGroupName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the Rule Collection Group"
-      }
-    },
-    "firewallRuleName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the firewall rule"
-      }
-    },
-    "firewallRulePriority": {
-      "type": "int",
-      "metadata": {
-        "description": "Priority of the firewall rule"
-      }
-    },
+    "firewallPolicyName": { "type": "string" },
+    "ruleCollectionGroupName": { "type": "string" },
+    "firewallRuleName": { "type": "string" },
+    "firewallRulePriority": { "type": "int" },
     "firewallRuleAction": {
       "type": "string",
-      "allowedValues": ["Allow", "Deny"],
-      "metadata": {
-        "description": "Action for the firewall rule"
-      }
+      "allowedValues": ["Allow", "Deny"]
     },
-    "firewallRuleSourceAddresses": {
-      "type": "array",
-      "metadata": {
-        "description": "Source addresses for the firewall rule"
-      }
+    "ruleType": {
+      "type": "string",
+      "allowedValues": ["NetworkRule", "NatRule", "ApplicationRule"]
     },
-    "firewallRuleDestinationAddresses": {
+    "firewallRuleSourceAddresses": { "type": "array" },
+    "firewallRuleDestinationAddresses": { "type": "array" },
+    "firewallRuleDestinationPorts": { "type": "array", "defaultValue": [] },
+    "firewallRuleProtocol": { "type": "array", "defaultValue": [] },
+    "firewallRuleTranslatedAddress": { "type": "string", "defaultValue": "" },
+    "firewallRuleTranslatedPort": { "type": "string", "defaultValue": "" },
+    "firewallRuleFqdnTags": { "type": "array", "defaultValue": [] },
+    "firewallRuleTargetFqdns": { "type": "array", "defaultValue": [] },
+    "firewallRuleTargetUrls": { "type": "array", "defaultValue": [] },
+    "firewallRuleHttpHeadersToInsert": {
       "type": "array",
-      "metadata": {
-        "description": "Destination addresses for the firewall rule"
-      }
-    },
-    "firewallRuleDestinationPorts": {
-      "type": "array",
-      "metadata": {
-        "description": "Destination ports for the firewall rule"
-      }
-    },
-    "firewallRuleProtocol": {
-      "type": "array",
-      "allowedValues": [["TCP"], ["UDP"], ["Any"]],
-      "metadata": {
-        "description": "IP protocols for the firewall rule. Allowed values are 'TCP', 'UDP', or 'Any'."
-      }
+      "defaultValue": []
     }
   },
   "resources": [
@@ -77,11 +46,17 @@
             "rules": [
               {
                 "name": "[parameters('firewallRuleName')]",
-                "ruleType": "NetworkRule",
+                "ruleType": "[parameters('ruleType')]",
                 "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
                 "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
-                "destinationPorts": "[parameters('firewallRuleDestinationPorts')]",
-                "ipProtocols": "[parameters('firewallRuleProtocol')]"
+                "destinationPorts": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleDestinationPorts'), json('null'))]",
+                "ipProtocols": "[if(equals(parameters('ruleType'), 'NetworkRule'), parameters('firewallRuleProtocol'), json('null'))]",
+                "translatedAddress": "[if(equals(parameters('ruleType'), 'NatRule'), parameters('firewallRuleTranslatedAddress'), json('null'))]",
+                "translatedPort": "[if(equals(parameters('ruleType'), 'NatRule'), parameters('firewallRuleTranslatedPort'), json('null'))]",
+                "fqdnTags": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleFqdnTags'), json('null'))]",
+                "targetFqdns": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetFqdns'), json('null'))]",
+                "targetUrls": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleTargetUrls'), json('null'))]",
+                "httpHeadersToInsert": "[if(equals(parameters('ruleType'), 'ApplicationRule'), parameters('firewallRuleHttpHeadersToInsert'), json('null'))]"
               }
             ]
           }
