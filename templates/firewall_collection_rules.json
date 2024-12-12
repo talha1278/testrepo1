@@ -26,6 +26,7 @@
             "action": {
               "type": "[parameters('firewallRuleAction')]"
             },
+            "ruleType": "NetworkRule", 
             "rules": [
               {
                 "name": "[parameters('firewallRuleName')]",
