@@ -2,8 +2,8 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "firewallPolicyName": { "type": "string" },
-    "ruleCollectionGroupName": { "type": "string", "defaultValue": "default" },
+    "firewallPolicy1Name": { "type": "string" },
+    "ruleCollectionGroupName": { "type": "string" },
     "firewallRuleName": { "type": "string" },
     "firewallRulePriority": { "type": "int" },
     "firewallRuleAction": { "type": "string" },
@@ -14,31 +14,26 @@
   },
   "resources": [
     {
-      "type": "Microsoft.Network/firewallPolicies/ruleCollectionGroups",
-      "apiVersion": "2021-08-01",
-      "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2021-04-01",
+      "name": "FirewallPolicyRuleCollectionGroupDeployment",
       "properties": {
-        "priority": "[parameters('firewallRulePriority')]",
-        "ruleCollections": [
-          {
-            "name": "[parameters('firewallRuleName')]",
-            "priority": "[parameters('firewallRulePriority')]",
-            "action": {
-              "type": "[parameters('firewallRuleAction')]"
-            },
-            "ruleType": "NetworkRuleCollection",
-            "rules": [
-              {
-                "name": "[parameters('firewallRuleName')]",
-                "ruleType": "NetworkRule",
-                "ipProtocols": [ "[parameters('firewallRuleProtocol')]" ],
-                "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
-                "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
-                "destinationPorts": "[parameters('firewallRuleDestinationPorts')]"
-              }
-            ]
-          }
-        ]
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/firewall_collection_rules.json",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
+          "ruleCollectionGroupName": { "value": "[parameters('ruleCollectionGroupName')]" },
+          "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
+          "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
+          "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
+          "firewallRuleSourceAddresses": { "value": "[parameters('firewallRuleSourceAddresses')]" },
+          "firewallRuleDestinationAddresses": { "value": "[parameters('firewallRuleDestinationAddresses')]" },
+          "firewallRuleDestinationPorts": { "value": "[parameters('firewallRuleDestinationPorts')]" },
+          "firewallRuleProtocol": { "value": "[parameters('firewallRuleProtocol')]" }
+        }
       }
     }
   ]
