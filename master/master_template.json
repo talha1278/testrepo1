@@ -162,8 +162,8 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "FirewallCollectionRulesDeployment",
-      "dependsOn": [ "AzureFirewallDeployment" ],
+      "name": "FirewallPolicyRuleCollectionGroupDeployment",
+      "dependsOn": [ "FirewallPoliciesDeployment", "AzureFirewallDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -171,7 +171,8 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "firewallName": { "value": "[parameters('firewallName')]" },
+          "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
+          "ruleCollectionGroupName": { "value": "default" },
           "firewallRuleName": { "value": "[parameters('firewallRuleName')]" },
           "firewallRulePriority": { "value": "[parameters('firewallRulePriority')]" },
           "firewallRuleAction": { "value": "[parameters('firewallRuleAction')]" },
@@ -181,7 +182,7 @@
           "firewallRuleProtocol": { "value": "[parameters('firewallRuleProtocol')]" }
         }
       }
-    }
+    }  
   ],
   "outputs": {
     "PublicIpAddressResourceId": {
