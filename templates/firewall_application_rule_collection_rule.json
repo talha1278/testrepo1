@@ -12,14 +12,8 @@
       "apiVersion": "2024-01-01",
       "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
-        "priority": 300,
-        "ruleCollections": [
-          {
-            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
-            "action": { "type": "Allow" },
-            "rules": "[parameters('applicationRules')]"
-          }
-        ]
+        "priority": 200,
+        "ruleCollections": "[parameters('applicationRules')]"
       }
     }
   ]
