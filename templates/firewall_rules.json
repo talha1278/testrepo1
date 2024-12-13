@@ -1,0 +1,51 @@
+{
+    "networkRules": [
+      {
+        "name": "AllowHTTP",
+        "priority": 100,
+        "action": "Allow",
+        "sourceAddresses": ["10.0.0.0/24", "192.168.1.0/24"],
+        "destinationAddresses": ["*"],
+        "destinationPorts": ["80", "443"],
+        "ipProtocols": ["TCP"]
+      },
+      {
+        "name": "AllowFTP",
+        "priority": 200,
+        "action": "Allow",
+        "sourceAddresses": ["172.16.0.0/24"],
+        "destinationAddresses": ["*"],
+        "destinationPorts": ["21"],
+        "ipProtocols": ["TCP"]
+      }
+    ],
+    "applicationRules": [
+      {
+        "name": "AllowWeb",
+        "priority": 100,
+        "action": "Allow",
+        "sourceAddresses": ["192.168.1.1"],
+        "protocols": [
+          { "protocolType": "Http", "port": 80 },
+          { "protocolType": "Https", "port": 443 }
+        ],
+        "fqdnTags": [],
+        "targetFqdns": ["*.example.com"],
+        "targetUrls": [],
+        "httpHeadersToInsert": []
+      },
+      {
+        "name": "AllowOffice365",
+        "priority": 200,
+        "action": "Allow",
+        "sourceAddresses": ["10.0.0.0/24"],
+        "protocols": [
+          { "protocolType": "Https", "port": 443 }
+        ],
+        "fqdnTags": ["Office365"],
+        "targetFqdns": [],
+        "targetUrls": [],
+        "httpHeadersToInsert": []
+      }
+    ]
+  }
