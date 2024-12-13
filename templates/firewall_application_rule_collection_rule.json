@@ -13,7 +13,13 @@
       "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
         "priority": 300,
-        "ruleCollections": "[parameters('applicationRules')]"
+        "ruleCollections": [
+          {
+            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+            "action": { "type": "Allow" },
+            "rules": "[parameters('applicationRules')]"
+          }
+        ]
       }
     }
   ]
