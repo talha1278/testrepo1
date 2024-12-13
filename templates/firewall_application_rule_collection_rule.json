@@ -4,15 +4,7 @@
   "parameters": {
     "firewallPolicyName": { "type": "string" },
     "ruleCollectionGroupName": { "type": "string" },
-    "firewallRuleName": { "type": "string" },
-    "firewallRulePriority": { "type": "int" },
-    "firewallRuleAction": { "type": "string" },
-    "firewallRuleSourceAddresses": { "type": "array" },
-    "firewallRuleProtocol": { "type": "array" },
-    "firewallRuleFqdnTags": { "type": "array" },
-    "firewallRuleTargetFqdns": { "type": "array" },
-    "firewallRuleTargetUrls": { "type": "array" },
-    "firewallRuleHttpHeadersToInsert": { "type": "array" }
+    "rulesFileUri": { "type": "string" }
   },
   "resources": [
     {
@@ -20,30 +12,8 @@
       "apiVersion": "2024-01-01",
       "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
-        "priority": "[parameters('firewallRulePriority')]",
-        "ruleCollections": [
-          {
-            "name": "[parameters('firewallRuleName')]",
-            "priority": "[parameters('firewallRulePriority')]",
-            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
-            "action": {
-              "type": "[parameters('firewallRuleAction')]"
-            },
-            "rules": [
-              {
-                "ruleType": "ApplicationRule",
-                "name": "[parameters('firewallRuleName')]",
-                "protocols": "[parameters('firewallRuleProtocol')]",
-                "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
-                "fqdnTags": "[parameters('firewallRuleFqdnTags')]",
-                "targetFqdns": "[parameters('firewallRuleTargetFqdns')]",
-                "targetUrls": "[parameters('firewallRuleTargetUrls')]",
-                "httpHeadersToInsert": "[parameters('firewallRuleHttpHeadersToInsert')]",
-                "terminateTLS": false
-              }
-            ]
-          }
-        ]
+        "priority": 300,
+        "ruleCollections": "[json(loadTextContent(parameters('rulesFileUri'))).applicationRules]"
       }
     }
   ]
