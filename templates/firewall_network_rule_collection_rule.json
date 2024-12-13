@@ -4,7 +4,7 @@
   "parameters": {
     "firewallPolicyName": { "type": "string" },
     "ruleCollectionGroupName": { "type": "string" },
-    "rulesFileUri": { "type": "string" }
+    "networkRules": { "type": "array" }
   },
   "resources": [
     {
@@ -13,7 +13,7 @@
       "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
         "priority": 100,
-        "ruleCollections": "[json(loadTextContent(parameters('rulesFileUri'))).networkRules]"
+        "ruleCollections": "[parameters('networkRules')]"
       }
     }
   ]
