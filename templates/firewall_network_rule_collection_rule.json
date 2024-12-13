@@ -4,13 +4,7 @@
   "parameters": {
     "firewallPolicyName": { "type": "string" },
     "ruleCollectionGroupName": { "type": "string" },
-    "firewallRuleName": { "type": "string" },
-    "firewallRulePriority": { "type": "int" },
-    "firewallRuleAction": { "type": "string" },
-    "firewallRuleSourceAddresses": { "type": "array" },
-    "firewallRuleDestinationAddresses": { "type": "array" },
-    "firewallRuleDestinationPorts": { "type": "array" },
-    "firewallRuleIpProtocols": { "type": "array" }
+    "rulesFileUri": { "type": "string" }
   },
   "resources": [
     {
@@ -18,27 +12,8 @@
       "apiVersion": "2024-01-01",
       "name": "[concat(parameters('firewallPolicyName'), '/', parameters('ruleCollectionGroupName'))]",
       "properties": {
-        "priority": "[parameters('firewallRulePriority')]",
-        "ruleCollections": [
-          {
-            "name": "[parameters('firewallRuleName')]",
-            "priority": "[parameters('firewallRulePriority')]",
-            "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
-            "action": {
-              "type": "[parameters('firewallRuleAction')]"
-            },
-            "rules": [
-              {
-                "ruleType": "NetworkRule",
-                "name": "[parameters('firewallRuleName')]",
-                "ipProtocols": "[parameters('firewallRuleIpProtocols')]",
-                "sourceAddresses": "[parameters('firewallRuleSourceAddresses')]",
-                "destinationAddresses": "[parameters('firewallRuleDestinationAddresses')]",
-                "destinationPorts": "[parameters('firewallRuleDestinationPorts')]"
-              }
-            ]
-          }
-        ]
+        "priority": 100,
+        "ruleCollections": "[json(loadTextContent(parameters('rulesFileUri'))).networkRules]"
       }
     }
   ]
