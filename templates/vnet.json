@@ -2,24 +2,9 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "armVnetName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the virtual network"
-      }
-    },
-    "armVnetAddressSpaceCIDR": {
-      "type": "string",
-      "metadata": {
-        "description": "CIDR for the address space of the virtual network"
-      }
-    },
-    "subnets": {
-      "type": "array",
-      "metadata": {
-        "description": "Array of subnets to create"
-      }
-    }
+    "armVnetName": { "type": "string" },
+    "armVnetAddressSpaceCIDR": { "type": "string" },
+    "subnets": { "type": "array" }
   },
   "resources": [
     {
@@ -29,13 +14,10 @@
       "location": "[resourceGroup().location]",
       "properties": {
         "addressSpace": {
-          "addressPrefixes": [
-            "[parameters('armVnetAddressSpaceCIDR')]"
-          ]
+          "addressPrefixes": ["[parameters('armVnetAddressSpaceCIDR')]"]
         },
         "subnets": "[parameters('subnets')]"
       }
     }
-  ],
-  "outputs": {}
+  ]
 }
