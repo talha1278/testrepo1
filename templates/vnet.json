@@ -4,7 +4,9 @@
   "parameters": {
     "armVnetName": { "type": "string" },
     "armVnetAddressSpaceCIDR": { "type": "string" },
-    "subnets": { "type": "array" }
+    "subnetName": { "type": "string" },
+    "subnetAddressPrefix": { "type": "string" },
+    "natGatewayId": { "type": "string" }
   },
   "resources": [
     {
@@ -16,14 +18,24 @@
         "addressSpace": {
           "addressPrefixes": ["[parameters('armVnetAddressSpaceCIDR')]"]
         },
-        "subnets": "[parameters('subnets')]"
+        "subnets": [
+          {
+            "name": "[parameters('subnetName')]",
+            "properties": {
+              "addressPrefix": "[parameters('subnetAddressPrefix')]",
+              "natGateway": {
+                "id": "[parameters('natGatewayId')]"
+              }
+            }
+          }
+        ]
       }
     }
   ],
   "outputs": {
-    "subnetIds": {
-      "type": "array",
-      "value": "[array(parameters('subnets'))]"
+    "subnetId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('armVnetName'), parameters('subnetName'))]"
     }
   }
 }
