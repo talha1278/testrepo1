@@ -16,17 +16,14 @@
         "addressSpace": {
           "addressPrefixes": ["[parameters('armVnetAddressSpaceCIDR')]"]
         },
-        "subnets": [
-          "[for subnet in parameters('subnets'): union(subnet.properties, {
-            'name': subnet.name,
-            'properties': {
-              'natGateway': if(not(empty(subnet.properties.natGatewayId)), json('{\"id\":\"' + subnet.properties.natGatewayId + '\"}'), json('null')),
-              'routeTable': if(not(empty(subnet.properties.routeTable)), json('{\"id\":\"' + subnet.properties.routeTable + '\"}'), json('null')),
-              'networkSecurityGroup': if(not(empty(subnet.properties.networkSecurityGroup)), json('{\"id\":\"' + subnet.properties.networkSecurityGroup + '\"}'), json('null'))
-            }
-          })]"
-        ]
+        "subnets": "[parameters('subnets')]"
       }
     }
-  ]
+  ],
+  "outputs": {
+    "subnetIds": {
+      "type": "array",
+      "value": "[array(parameters('subnets'))]"
+    }
+  }
 }
