@@ -2,63 +2,62 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "publicIPAddressName": { "type": "string" },
-    "natGatewayName": { "type": "string" },
-    "firewallName": { "type": "string" },
+    "vnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the virtual network."
+      }
+    },
+    "addressPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Address prefix for the virtual network."
+      }
+    },
+    "subnetName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the subnet."
+      }
+    },
+    "subnetPrefix": {
+      "type": "string",
+      "metadata": {
+        "description": "Address prefix for the subnet."
+      }
+    },
+    "publicIPAddressName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the Public IP address."
+      }
+    },
+    "natGatewayName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of the NAT Gateway."
+      }
+    },
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for the resources."
+      }
+    },
     "firewallPublicIpName": { "type": "string" },
-    "vnetName": { "type": "string" },
-    "armVnetAddressSpaceCIDR": { "type": "string" },
-    "subnet1Name": { "type": "string" },
-    "subnet1Prefix": { "type": "string" },
-    "subnet2Name": { "type": "string" },
-    "subnet2Prefix": { "type": "string" },
     "firewallPolicy1Name": { "type": "string" },
-    "firewallPolicy2Name": { "type": "string" },
-    "location": { "type": "string" },
-
-    "networkRuleCollectionGroupName": { "type": "string" },
-    "applicationRuleCollectionGroupName": { "type": "string" },
-
-    "networkRuleName": { "type": "string" },
-    "networkRulePriority": { "type": "int" },
-    "networkRuleAction": { "type": "string" },
-    "networkRuleSourceAddresses": { "type": "array" },
-    "networkRuleDestinationAddresses": { "type": "array" },
-    "networkRuleDestinationPorts": { "type": "array" },
-    "networkRuleIpProtocols": { "type": "array" },
-
-    "applicationRuleName": { "type": "string" },
-    "applicationRulePriority": { "type": "int" },
-    "applicationRuleAction": { "type": "string" },
-    "applicationRuleSourceAddresses": { "type": "array" },
-    "applicationRuleProtocol": { "type": "array" },
-    "applicationRuleFqdnTags": { "type": "array" },
-    "applicationRuleTargetFqdns": { "type": "array" },
-    "applicationRuleTargetUrls": { "type": "array" },
-    "applicationRuleHttpHeadersToInsert": { "type": "array" }
+  "firewallPolicy2Name": { "type": "string" },
+  "firewallName": { "type": "string" },
+  "networkRuleCollectionGroupName": { "type": "string" },
+  "applicationRuleCollectionGroupName": { "type": "string" },
+  "rulesFileUri": { "type": "object" }
   },
   "resources": [
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "VNetDeployment",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/virtual-network.json",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "armVnetName": { "value": "[parameters('vnetName')]" },
-          "armVnetAddressSpaceCIDR": { "value": "[parameters('armVnetAddressSpaceCIDR')]" }
-        }
-      }
-    },
-    {
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2021-04-01",
       "name": "PublicIPDeployment",
-      "dependsOn": [ "VNetDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -93,23 +92,30 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
-      "name": "SubnetUpdateDeployment",
+      "name": "VNetDeployment",
       "dependsOn": [ "NatGatewayDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/subnet.json",
+          "uri": "https://raw.githubusercontent.com/talha1278/testrepo1/main/templates/vnet.json",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "virtualNetworkName": { "value": "[parameters('vnetName')]" },
-          "subnetName": { "value": "[parameters('subnet1Name')]" },
-          "subnetAddressPrefix": { "value": "[parameters('subnet1Prefix')]" },
-          "natGatewayId": { "value": "[resourceId('Microsoft.Network/natGateways', parameters('natGatewayName'))]" },
-          "serviceEndpointList": { "value": [] },
-          "delegations": { "value": [] },
-          "routeTable": { "value": {} },
-          "networkSecurityGroup": { "value": {} }
+          "vnetName": {
+            "value": "[parameters('vnetName')]"
+          },
+          "addressPrefix": {
+            "value": "[parameters('addressPrefix')]"
+          },
+          "subnetName": {
+            "value": "[parameters('subnetName')]"
+          },
+          "subnetPrefix": {
+            "value": "[parameters('subnetPrefix')]"
+          },
+          "natGatewayId": {
+            "value": "[resourceId('Microsoft.Network/natGateways', parameters('natGatewayName'))]"
+          }
         }
       }
     },
@@ -117,7 +123,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "FirewallPublicIPDeployment",
-      "dependsOn": [ "VNetDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -135,7 +140,6 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "FirewallPoliciesDeployment",
-      "dependsOn": [ "VNetDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -157,7 +161,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "AzureFirewallDeployment",
-      "dependsOn": [ "FirewallPublicIPDeployment", "NatGatewayDeployment", "FirewallPoliciesDeployment", "VNetDeployment" ],
+      "dependsOn": [ "FirewallPublicIPDeployment", "FirewallPoliciesDeployment", "VNetDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -167,7 +171,7 @@
         "parameters": {
           "firewallName": { "value": "[parameters('firewallName')]" },
           "location": { "value": "[parameters('location')]" },
-          "firewallSubnetId": { "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnet1Name'))]" },
+          "firewallSubnetId": { "value": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]" },
           "firewallPublicIpId": { "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('firewallPublicIpName'))]" },
           "firewallPolicyId": { "value": "[resourceId('Microsoft.Network/firewallPolicies', parameters('firewallPolicy1Name'))]" }
         }
@@ -177,7 +181,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "NetworkRuleCollectionDeployment",
-      "dependsOn": [ "FirewallPoliciesDeployment", "AzureFirewallDeployment" ],
+      "dependsOn": [ "FirewallPoliciesDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -187,13 +191,7 @@
         "parameters": {
           "firewallPolicyName": { "value": "[parameters('firewallPolicy1Name')]" },
           "ruleCollectionGroupName": { "value": "[parameters('networkRuleCollectionGroupName')]" },
-          "firewallRuleName": { "value": "[parameters('networkRuleName')]" },
-          "firewallRulePriority": { "value": "[parameters('networkRulePriority')]" },
-          "firewallRuleAction": { "value": "[parameters('networkRuleAction')]" },
-          "firewallRuleSourceAddresses": { "value": "[parameters('networkRuleSourceAddresses')]" },
-          "firewallRuleDestinationAddresses": { "value": "[parameters('networkRuleDestinationAddresses')]" },
-          "firewallRuleDestinationPorts": { "value": "[parameters('networkRuleDestinationPorts')]" },
-          "firewallRuleIpProtocols": { "value": "[parameters('networkRuleIpProtocols')]" }
+          "networkRules": { "value": "[parameters('rulesFileUri').networkRules]" }
         }
       }
     },
@@ -201,7 +199,7 @@
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2021-04-01",
       "name": "ApplicationRuleCollectionDeployment",
-      "dependsOn": [ "FirewallPoliciesDeployment", "AzureFirewallDeployment" ],
+      "dependsOn": [ "FirewallPoliciesDeployment" ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -211,15 +209,7 @@
         "parameters": {
           "firewallPolicyName": { "value": "[parameters('firewallPolicy2Name')]" },
           "ruleCollectionGroupName": { "value": "[parameters('applicationRuleCollectionGroupName')]" },
-          "firewallRuleName": { "value": "[parameters('applicationRuleName')]" },
-          "firewallRulePriority": { "value": "[parameters('applicationRulePriority')]" },
-          "firewallRuleAction": { "value": "[parameters('applicationRuleAction')]" },
-          "firewallRuleSourceAddresses": { "value": "[parameters('applicationRuleSourceAddresses')]" },
-          "firewallRuleProtocol": { "value": "[parameters('applicationRuleProtocol')]" },
-          "firewallRuleFqdnTags": { "value": "[parameters('applicationRuleFqdnTags')]" },
-          "firewallRuleTargetFqdns": { "value": "[parameters('applicationRuleTargetFqdns')]" },
-          "firewallRuleTargetUrls": { "value": "[parameters('applicationRuleTargetUrls')]" },
-          "firewallRuleHttpHeadersToInsert": { "value": "[parameters('applicationRuleHttpHeadersToInsert')]" }
+          "applicationRules": { "value": "[parameters('rulesFileUri').applicationRules]" }
         }
       }
     }
