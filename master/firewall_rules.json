@@ -31,6 +31,22 @@
           "destinationPorts": ["445"]
         }
       ]
+    },
+    {
+      "name": "BlockFTP",
+      "priority": 300,
+      "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+      "action": { "type": "Deny" },
+      "rules": [
+        {
+          "ruleType": "NetworkRule",
+          "name": "BlockFTP",
+          "ipProtocols": ["TCP"],
+          "sourceAddresses": ["172.16.0.0/24"],
+          "destinationAddresses": ["*"],
+          "destinationPorts": ["21"]
+        }
+      ]
     }
   ],
   "applicationRules": [
@@ -68,6 +84,26 @@
           ],
           "sourceAddresses": ["10.3.0.0/16"],
           "targetFqdns": ["*.github.com"],
+          "fqdnTags": [],
+          "httpHeadersToInsert": [],
+          "terminateTLS": false
+        }
+      ]
+    },
+    {
+      "name": "BlockSocialMedia",
+      "priority": 300,
+      "ruleCollectionType": "FirewallPolicyFilterRuleCollection",
+      "action": { "type": "Deny" },
+      "rules": [
+        {
+          "ruleType": "ApplicationRule",
+          "name": "BlockSocialMedia",
+          "protocols": [
+            { "protocolType": "Https", "port": 443 }
+          ],
+          "sourceAddresses": ["*"],
+          "targetFqdns": ["*.facebook.com", "*.instagram.com"],
           "fqdnTags": [],
           "httpHeadersToInsert": [],
           "terminateTLS": false
