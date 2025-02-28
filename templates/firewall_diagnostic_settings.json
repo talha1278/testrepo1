@@ -11,52 +11,52 @@
       "logAnalyticsWorkspaceId": {
         "type": "string"
       },
-      "AzureFirewallApplicationRule" {
+      "AzureFirewallApplicationRule": {
           "type": "bool"
       },
-      "AzureFirewallNetworkRule" {
+      "AzureFirewallNetworkRule": {
           "type": "bool"
       },
-      "AzureFirewallDnsProxy" {
+      "AzureFirewallDnsProxy": {
           "type": "bool"
       },
-      "AZFWNetworkRule" {
+      "AZFWNetworkRule": {
           "type": "bool"
       },
-      "AZFWApplicationRule" {
+      "AZFWApplicationRule": {
           "type": "bool"
       },
-      "AZFWNatRule" {
+      "AZFWNatRule": {
           "type": "bool"
       },
-      "AZFWThreatIntel" {
+      "AZFWThreatIntel": {
           "type": "bool"
       },
-      "AZFWIdpsSignature" {
+      "AZFWIdpsSignature": {
           "type": "bool"
       },
-      "AZFWDnsQuery" {
+      "AZFWDnsQuery": {
           "type": "bool"
       },
-      "AZFWFqdnResolveFailure" {
+      "AZFWFqdnResolveFailure": {
           "type": "bool"
       },
-      "AZFWFatFlow" {
+      "AZFWFatFlow": {
           "type": "bool"
       },
-      "AZFWFlowTrace" {
+      "AZFWFlowTrace": {
           "type": "bool"
       },
-      "AZFWApplicationRuleAggregation" {
+      "AZFWApplicationRuleAggregation": {
           "type": "bool"
       },
-      "AZFWNetworkRuleAggregation" {
+      "AZFWNetworkRuleAggregation": {
           "type": "bool"
       },
-      "AZFWNatRuleAggregation" {
+      "AZFWNatRuleAggregation": {
           "type": "bool"
       },
-      "AllMetrics" {
+      "AllMetrics": {
           "type": "bool"
       }
     },
