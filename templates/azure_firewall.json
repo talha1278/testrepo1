@@ -20,6 +20,12 @@
         "metadata": {
           "description": "The resource ID of the Public IP to associate with the Azure Firewall."
         }
+      },
+      "logAnalyticsWorkspaceId": {
+        "type": "string",
+        "metadata": {
+          "description": "Resource ID of the Log Analytics Workspace."
+        }
       }
     },
     "resources": [
@@ -50,6 +56,31 @@
             "id": "[parameters('firewallPolicyId')]"
           }
         }
+      },
+      {
+        "type": "Microsoft.Insights/diagnosticSettings",
+        "apiVersion": "2021-05-01-preview",
+        "name": "FirewallDiagnostics",
+        "dependsOn": [
+          "[resourceId('Microsoft.Network/azureFirewalls', parameters('firewallName'))]"
+        ],
+        "properties": {
+          "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+          "logs": [
+            {
+              "category": "AzureFirewallApplicationRule",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallNetworkRule",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallThreatIntel",
+              "enabled": true
+            }
+          ]
+        }
       }
     ]
-  }
+}
