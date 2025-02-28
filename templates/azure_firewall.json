@@ -62,8 +62,9 @@
         "apiVersion": "2021-05-01-preview",
         "name": "FirewallDiagnostics",
         "dependsOn": [
-          "[concat('/subscriptions/', subscription().subscriptionId, '/resourceGroups/', resourceGroup().name, '/providers/Microsoft.Network/azureFirewalls/', parameters('firewallName'))]"
+          "[resourceId('Microsoft.Network/azureFirewalls', parameters('firewallName'))]"
         ],
+        "scope": "[resourceId('Microsoft.Network/azureFirewalls', parameters('firewallName'))]",
         "properties": {
           "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
           "logs": [
