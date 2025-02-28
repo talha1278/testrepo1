@@ -20,12 +20,6 @@
         "metadata": {
           "description": "The resource ID of the Public IP to associate with the Azure Firewall."
         }
-      },
-      "logAnalyticsWorkspaceId": {
-        "type": "string",
-        "metadata": {
-          "description": "Resource ID of the Log Analytics Workspace."
-        }
       }
     },
     "resources": [
@@ -55,42 +49,6 @@
           "firewallPolicy": {
             "id": "[parameters('firewallPolicyId')]"
           }
-        }
-      },
-      {
-        "type": "Microsoft.Insights/diagnosticSettings",
-        "apiVersion": "2021-05-01-preview",
-        "name": "FirewallDiagnostics",
-        "dependsOn": [
-          "[resourceId('Microsoft.Network/azureFirewalls', parameters('firewallName'))]"
-        ],
-        "scope": "[resourceId('Microsoft.Network/azureFirewalls', parameters('firewallName'))]",
-        "properties": {
-          "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
-          "logAnalyticsDestinationType": "AzureDiagnostics",
-          "logs": [
-            {"category": "AzureFirewallApplicationRule", "enabled": true},
-            {"category": "AzureFirewallNetworkRule", "enabled": true},
-            {"category": "AzureFirewallDnsProxy", "enabled": true},
-            {"category": "AZFWNetworkRule", "enabled": true},
-            {"category": "AZFWApplicationRule", "enabled": true},
-            {"category": "AZFWNatRule", "enabled": true},
-            {"category": "AZFWThreatIntel", "enabled": true},
-            {"category": "AZFWIdpsSignature", "enabled": true},
-            {"category": "AZFWDnsQuery", "enabled": true},
-            {"category": "AZFWFqdnResolveFailure", "enabled": true},
-            {"category": "AZFWFatFlow", "enabled": true},
-            {"category": "AZFWFlowTrace", "enabled": false},
-            {"category": "AZFWApplicationRuleAggregation", "enabled": false},
-            {"category": "AZFWNetworkRuleAggregation", "enabled": false},
-            {"category": "AZFWNatRuleAggregation", "enabled": false}
-          ],
-          "metrics": [
-            {
-              "enabled": false,
-              "category": "AllMetrics"
-            }
-          ]
         }
       }
     ]
