@@ -67,42 +67,28 @@
         "scope": "[resourceId('Microsoft.Network/azureFirewalls', parameters('firewallName'))]",
         "properties": {
           "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
+          "logAnalyticsDestinationType": "AzureDiagnostics",
           "logs": [
+            {"category": "AzureFirewallApplicationRule", "enabled": true},
+            {"category": "AzureFirewallNetworkRule", "enabled": true},
+            {"category": "AzureFirewallDnsProxy", "enabled": true},
+            {"category": "AZFWNetworkRule", "enabled": true},
+            {"category": "AZFWApplicationRule", "enabled": true},
+            {"category": "AZFWNatRule", "enabled": true},
+            {"category": "AZFWThreatIntel", "enabled": true},
+            {"category": "AZFWIdpsSignature", "enabled": true},
+            {"category": "AZFWDnsQuery", "enabled": true},
+            {"category": "AZFWFqdnResolveFailure", "enabled": true},
+            {"category": "AZFWFatFlow", "enabled": true},
+            {"category": "AZFWFlowTrace", "enabled": false},
+            {"category": "AZFWApplicationRuleAggregation", "enabled": false},
+            {"category": "AZFWNetworkRuleAggregation", "enabled": false},
+            {"category": "AZFWNatRuleAggregation", "enabled": false}
+          ],
+          "metrics": [
             {
-              "category": "AzureFirewallApplicationRule (Legacy Azure Diagnostics)",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallNetworkRule (Legacy Azure Diagnostics)",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallNetworkRule",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallApplicationRule",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallNatRule",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallThreatIntelligence",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallDnsQuery",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallFqdnResolutionFailure",
-              "enabled": true
-            },
-            {
-              "category": "AzureFirewallFatFlowLog",
-              "enabled": true
+              "enabled": false,
+              "category": "AllMetrics"
             }
           ]
         }
