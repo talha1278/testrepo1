@@ -69,7 +69,11 @@
           "workspaceId": "[parameters('logAnalyticsWorkspaceId')]",
           "logs": [
             {
-              "category": "AzureFirewallApplicationRule",
+              "category": "AzureFirewallApplicationRule (Legacy Azure Diagnostics)",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallNetworkRule (Legacy Azure Diagnostics)",
               "enabled": true
             },
             {
@@ -77,7 +81,27 @@
               "enabled": true
             },
             {
-              "category": "AzureFirewallThreatIntel",
+              "category": "AzureFirewallApplicationRule",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallNatRule",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallThreatIntelligence",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallDnsQuery",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallFqdnResolutionFailure",
+              "enabled": true
+            },
+            {
+              "category": "AzureFirewallFatFlowLog",
               "enabled": true
             }
           ]
